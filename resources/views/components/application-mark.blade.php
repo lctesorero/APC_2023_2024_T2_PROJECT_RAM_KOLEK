@@ -1,1 +1,0 @@
-<img src="{{ url('/img/apc-logo.png') }}" alt="apc-logo"/>
