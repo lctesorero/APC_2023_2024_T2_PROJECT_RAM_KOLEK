@@ -35,7 +35,7 @@ class TeamResource extends Resource
 
         return $form
             ->schema([
-                Forms\Components\Select::make('owner')
+                Forms\Components\Select::make('user_id')
                     ->label('Professor')
                     ->options($professors)
                     ->searchable()
@@ -54,13 +54,13 @@ class TeamResource extends Resource
 
     public static function table(Table $table): Table
     {
+
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('owner')
+                Tables\Columns\TextColumn::make('user.email')
+                    ->label('Owner')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('members')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

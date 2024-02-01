@@ -6,6 +6,13 @@ use App\Filament\Resources\ProjectSubmissionResource;
 use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\ViewRecord;
+use App\Models\ProjectSubmissionStatus;
+use App\Models\ProjectSubmission;
+use App\Models\User;
+use Filament\Forms;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Forms\Set;
+use Filament\Filament;
 
 class ViewProjectSubmission extends ViewRecord
 {
@@ -15,24 +22,32 @@ class ViewProjectSubmission extends ViewRecord
 
     protected function getHeaderActions(): array
     {
+
         return [
-            Actions\EditAction::make(),
-        ];
-    }
-    
-        /**
-     * Get the completion action.
-     *
-     * @return Filament\Actions\Action
-     * @throws Exception
-     */
-    protected function getOnCompletionAction(): Action
-    {
-        return Action::make("Done")
-            ->color("success")
-            // Do not use the visible method, since it is being used internally to show this action if the approval flow has been completed.
-            // Using the hidden method add your condition to prevent the action from being performed more than once
-            ->hidden(fn(ApprovableModel $record)=> $record->shouldBeHidden());
+            Action::make('approve')
+            ->color('success')
+            ->requiresConfirmation()
+            ->action(function (ProjectSubmission $project) {
+                $user = auth()->user();
+                return ProjectSubmissionStatus::create([
+                    'project_id' => $project->id,
+                    'user_id' => $user->id,
+                    'status' => 'approved',
+                    'type' => 'professor',
+                ]);
+            }),
+            Action::make('return')
+            ->requiresConfirmation()
+            ->action(function (ProjectSubmission $project) {
+                $user = auth()->user();
+                return ProjectSubmissionStatus::create([
+                    'project_id' => $project->id,
+                    'user_id' => $user->id,
+                    'status' => 'returned',
+                    'type' => 'professor',
+                ]);
+            }),
+            ];
     }
 
 }

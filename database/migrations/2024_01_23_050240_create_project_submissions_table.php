@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('project_submissions', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('abstract');
+            $table->string('abstract')->nullable();
             $table->string('categories')->nullable();
             $table->string('subject');
             $table->string('professor');
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('team');
             $table->string('academic_year');
             $table->string('term');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

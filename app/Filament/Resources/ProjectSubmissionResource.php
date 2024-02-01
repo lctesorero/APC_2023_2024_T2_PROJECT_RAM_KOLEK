@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\FileUpload;
 use Carbon\Carbon;
+use Filament\Resources\Forms\Components\Modal;
+use Illuminate\Support\Facades\Auth;
 
 
 class ProjectSubmissionResource extends Resource
@@ -34,7 +36,6 @@ class ProjectSubmissionResource extends Resource
         $teams = Team::pluck('name', 'id')
         ->toArray();
 
-        // Generate a range of school years, e.g., from the current year up to the next 10 years
         $startYear = Carbon::now()->year;
         $endYear = $startYear+5;
         $academicYears = [];
@@ -78,7 +79,7 @@ class ProjectSubmissionResource extends Resource
                 ->openable()
                 ->downloadable()
                 ->previewable(true)
-                ->directory('project_files')
+                ->directory('project_files'),
             ]);
     }
 
@@ -90,9 +91,8 @@ class ProjectSubmissionResource extends Resource
                 ->searchable(),
                 Tables\Columns\TextColumn::make('categories'),
                 Tables\Columns\TextColumn::make('subject'),
-                Tables\Columns\TextColumn::make('created_at')
-                ->sortable(),
-                Tables\Columns\TextColumn::make('updated_at')
+                Tables\Columns\TextColumn::make('updated_at'),
+                Tables\Columns\TextColumn::make('status'),
             ])
             ->filters([
                 //

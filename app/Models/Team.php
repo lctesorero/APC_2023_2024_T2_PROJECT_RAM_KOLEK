@@ -12,11 +12,18 @@ class Team extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'owner',
+        'user_id',
         'name',
         'members',
     ];
     protected $casts = [
         'members' => 'array',
     ];
+
+    public function user() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
+
+
